@@ -1,0 +1,86 @@
+---
+import IndexImageLayout from "../components/IndexImageLayout.astro";
+const { pageTitle } = Astro.props;
+import { getCollection } from "astro:content";
+import { getImage } from "astro:assets";
+
+let allImages: { large: string[]; medium: string[]; small: string[] } = { large: [], medium: [], small: [] };
+let allAlts: string[] = [];
+let allUrls: string[] = [];
+
+const allContent = await getCollection("blog");
+const postsWithImages = allContent.filter(
+    (post) => post.data.image?.src && post.data.image?.alt,
+);
+
+const imagePromises = postsWithImages.map(async (post) => {
+  const promiseBody = {
+      src: post.data.image!.src,
+      alt: post.data.image!.alt,
+      decoding: "async",
+      format: "avif",
+      quality: 65,
+  }
+  const [largeImage, mediumImage, smallImage] = await Promise.all([
+      getImage({
+      ...promiseBody,
+      width: 1920,
+      height: 1080,
+      }),
+      getImage({
+      ...promiseBody,
+      width: 1280,
+      height: 720,
+      }),
+      getImage({
+      ...promiseBody,
+      width: 854,
+      height: 480,
+      }),
+  ]);
+return {
+  large: largeImage.src,
+  medium: mediumImage.src,
+  small: smallImage.src,
+  alt: post.data.image!.alt,
+  url: `/${"blog"}/${post.id}`,
+};
+});
+const results = await Promise.all(imagePromises);
+
+results.forEach((result) => {
+  allImages.large.push(result.large);
+  allImages.medium.push(result.medium);
+  allImages.small.push(result.small);
+  allAlts.push(result.alt);
+  allUrls.push(result.url);
+});
+
+const imageSizes = {
+  width: {
+    large: 1920,
+    medium: 1280,
+    small: 854,
+  },
+  height: {
+    large: 1080,
+    medium: 720,
+    small: 480,
+  },
+};
+---
+
+{
+  allImages.large.length > 0 ? (
+    <IndexImageLayout
+      title={pageTitle}
+      images={JSON.stringify(allImages)}
+      alt={JSON.stringify(allAlts)}
+      urls={JSON.stringify(allUrls)}
+      width={imageSizes.width}
+      height={imageSizes.height}
+    />
+  ) : (
+    <p>No images found</p>
+  )
+}

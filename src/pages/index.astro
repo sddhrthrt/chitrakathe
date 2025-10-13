@@ -6,6 +6,7 @@ import ArrowCard from "@components/ArrowCard.astro";
 import Link from "@components/Link.astro";
 import { getCollection } from "astro:content";
 import IndexContent from "@content/index-content.mdx";
+import IndexImage from "@components/IndexImage.astro";
 
 const blog = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
@@ -28,6 +29,7 @@ const blog = (await getCollection("blog"))
           <article class="space-y-4">
             <div class="animate">
               <IndexContent />
+              <IndexImage />
             </div>
           </article>
         </section>
