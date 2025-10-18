@@ -1,18 +1,27 @@
 ---
 import Layout from "@layouts/Layout.astro";
 import Container from "@components/Container.astro";
-import { SITE, HOME, SOCIALS } from "@consts";
+import { SITE, HOME } from "@consts";
 import ArrowCard from "@components/ArrowCard.astro";
 import Link from "@components/Link.astro";
 import { getCollection } from "astro:content";
-import IndexContent from "@content/index-content.mdx";
-import IndexImage from "@components/IndexImage.astro";
+import { Picture } from "astro:assets";
+
+let allImages = import.meta.glob("../images/*.jpg") as Record<string, () => Promise<{ default: string }>>;
 
 const blog = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, SITE.NUM_POSTS_ON_HOMEPAGE);
 
+let firstPost = blog[0] || null;
+let heroImage = (firstPost && firstPost.data.image) ? (
+  Object.entries(allImages)
+    .find((path) =>
+      firstPost.data.image?.src.includes(path[0])
+    )
+  ) : null;
+let heroImageSrc = heroImage ? await heroImage[1]() : null;
 // const projects: CollectionEntry<"projects">[] = (
 //   await getCollection("projects")
 // )
@@ -28,8 +37,15 @@ const blog = (await getCollection("blog"))
         <section>
           <article class="space-y-4">
             <div class="animate">
-              <IndexContent />
-              <IndexImage />
+              {heroImageSrc ? (
+                <a href={`/${firstPost.collection}/${firstPost.id}`} class="block">
+                  <Picture
+                    src={heroImageSrc.default}
+                    alt={firstPost.data.image?.alt || ""}
+                    placeholder="blur"
+                  />
+                </a>
+              ) : null}
             </div>
           </article>
         </section>

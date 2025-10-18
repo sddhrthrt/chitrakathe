@@ -4,7 +4,7 @@ export const SITE: Site = {
   TITLE: "Chitrakathe",
   DESCRIPTION: "A blog for my photography and writing.",
   EMAIL: "sddhrthrt@gmail.com",
-  NUM_POSTS_ON_HOMEPAGE: 5,
+  NUM_POSTS_ON_HOMEPAGE: 3,
   NUM_PROJECTS_ON_HOMEPAGE: 3,
 };
 
