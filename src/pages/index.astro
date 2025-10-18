@@ -86,43 +86,6 @@ let heroImageSrc = heroImage ? await heroImage[1]() : null;
           </ul>
         </section> -->
 
-        <section class="animate space-y-4">
-          <h2 class="font-semibold text-black dark:text-white">
-            Let's Connect
-          </h2>
-          <article>
-            <p>
-              This is a personal blog, so please don't assume I am speaking for anyone who might be employing me. When I am, I'll make it explicit. 
-            </p>
-            <p>
-              Send me an email to reach out!
-            </p>
-          </article>
-          <ul class="not-prose flex flex-wrap gap-2">
-            {
-              SOCIALS.map((SOCIAL) => (
-                <li class="flex gap-x-2 text-nowrap">
-                  <Link
-                    href={SOCIAL.HREF}
-                    external
-                    aria-label={`${SITE.TITLE} on ${SOCIAL.NAME}`}
-                  >
-                    {SOCIAL.NAME}
-                  </Link>
-                  {"/"}
-                </li>
-              ))
-            }
-            <li class="line-clamp-1">
-              <Link
-                href={`mailto:${SITE.EMAIL}`}
-                aria-label={`Email ${SITE.TITLE}`}
-              >
-                {SITE.EMAIL}
-              </Link>
-            </li>
-          </ul>
-        </section>
       </div>
     </aside>
   </Container>
