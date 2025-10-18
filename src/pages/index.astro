@@ -42,7 +42,8 @@ let heroImageSrc = heroImage ? await heroImage[1]() : null;
                   <Picture
                     src={heroImageSrc.default}
                     alt={firstPost.data.image?.alt || ""}
-                    placeholder="blur"
+                    width={800}
+                    height={400}
                   />
                 </a>
               ) : null}
