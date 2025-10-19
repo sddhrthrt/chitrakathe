@@ -7,7 +7,7 @@ import Link from "@components/Link.astro";
 import { getCollection } from "astro:content";
 import { Picture } from "astro:assets";
 
-let allImages = import.meta.glob("../images/*.jpg") as Record<string, () => Promise<{ default: string }>>;
+let allImages = import.meta.glob("../images/**/*.jpg") as Record<string, () => Promise<{ default: string }>>;
 
 const blog = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
@@ -18,7 +18,7 @@ let firstPost = blog[0] || null;
 let heroImage = (firstPost && firstPost.data.image) ? (
   Object.entries(allImages)
     .find((path) =>
-      firstPost.data.image?.src.includes(path[0])
+      path[0].includes(firstPost.data.image!.src)
     )
   ) : null;
 let heroImageSrc = heroImage ? await heroImage[1]() : null;

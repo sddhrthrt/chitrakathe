@@ -1,14 +1,18 @@
 ---
 type Props = {
   href: string;
+  opaque?: boolean;
 };
 
-const { href } = Astro.props;
+
+const { href, opaque } = Astro.props;
+console.log(opaque);
+let opacity = opaque ? "90" : "5";
 ---
 
 <a
   href={href}
-  class="not-prose group relative flex w-fit flex-nowrap rounded-sm border border-black/15 py-1.5 pl-7 pr-3 transition-colors duration-300 ease-in-out hover:bg-black/5 hover:text-black focus-visible:bg-black/5 focus-visible:text-black dark:border-white/20 dark:hover:bg-white/5 dark:hover:text-white dark:focus-visible:bg-white/5 dark:focus-visible:text-white"
+  class=`not-prose group relative flex w-fit flex-nowrap rounded-sm border border-black/15 text-white dark:text-black bg-black/50 dark:bg-white/40 py-1.5 pl-7 pr-3 transition-colors duration-300 ease-in-out hover:bg-black/80 hover:text-white focus-visible:bg-black/80 focus-visible:text-white dark:border-white/20 dark:hover:bg-white/80 dark:hover:text-black dark:focus-visible:bg-white/80 dark:focus-visible:text-black `
 >
   <svg
     xmlns="http://www.w3.org/2000/svg"

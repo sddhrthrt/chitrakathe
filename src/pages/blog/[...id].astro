@@ -7,7 +7,9 @@ import { readingTime } from "@lib/utils";
 import BackToPrevious from "@components/BackToPrevious.astro";
 import PostNavigation from "@components/PostNavigation.astro";
 import TableOfContents from "@components/TableOfContents.astro";
-import Giscus from "@components/Giscus.astro";
+import { getImage } from "astro:assets";
+import HeroImage from "../../components/HeroImage.tsx";
+// import Giscus from "@components/Giscus.astro";
 
 export async function getStaticPaths() {
   const posts = (await getCollection("blog"))
@@ -48,44 +50,145 @@ const nextPost = getNextPost();
 const prevPost = getPrevPost();
 
 const post = Astro.props;
+let image = post.data.image;
+
+let allImages = import.meta.glob("../../images/**/*.jpg") as Record<string, () => Promise<{ default: string }>>;
+let heroImage = image ? (
+  Object.entries(allImages)
+    .find((path) =>
+      path[0].includes(image.src)
+    )
+  ) : null;
+let src = heroImage ? await heroImage[1]() : null;
+
+
+const backgroundImage = src
+  ? await getImage({
+      src: src.default,
+      alt: image!.alt,
+      width: 3840,
+      height: 2160,
+      format: "avif",
+      loading: "eager",
+      decoding: "sync",
+      fetchpriority: "high",
+    })
+  : null;
+
+const mobileBackgroundImage = src
+  ? await getImage({
+      src: src.default,
+      alt: image!.alt,
+      width: 1920,
+      height: 1080,
+      format: "avif",
+      quality: "65",
+      loading: "eager",
+      decoding: "sync",
+      fetchpriority: "high",
+    })
+  : null;
+
+const metaImage = src
+  ? await getImage({
+      src: src.default,
+      alt: image!.alt,
+      width: 1280,
+      height: 720,
+      decoding: "async",
+      format: "webp",
+      loading: "lazy",
+    })
+  : null;
+
 const { Content, headings } = await render(post);
+
 ---
 
 <Layout title={post.data.title} description={post.data.description}>
-  <Container>
-    <div class="animate">
-      <BackToPrevious href="/blog">Back to blog</BackToPrevious>
-    </div>
-    <div class="my-10 space-y-1">
-      <div class="animate flex items-center gap-1.5">
-        <div class="font-base text-sm">
-          <FormattedDate date={post.data.date} />
+    {
+    image ? (
+      <HeroImage
+        client:load
+        backgroundImage={backgroundImage!.src}
+        mobileBackgroundImage={mobileBackgroundImage!.src}
+        positionX={image.positionx}
+        positionY={image.positiony}
+        alt={image.alt}
+      >
+        <div class="animate">
+          <BackToPrevious href="/blog" opaque={true}>All blogs</BackToPrevious>
         </div>
-        &bull;
-        {post.body && (
-          <div class="font-base text-sm">
-            {readingTime(post.body)}
+        <div class="my-4 space-y-1 p-4 py-6 bg-white/40 dark:bg-black/40 rounded-md">
+          <div class="animate flex items-center gap-1.5">
+            <div class="text-sm font-semibold">
+              <FormattedDate date={post.data.date} />
+            </div>
+            &bull;
+            {post.body && (
+              <div class="text-sm font-semibold">
+                {readingTime(post.body)}
+              </div>
+            )}        
           </div>
-        )}        
-      </div>
-      <h1 class="animate text-3xl font-semibold text-black dark:text-white">
-        {post.data.title}
-      </h1>
-      {
-        post.data.tags && post.data.tags?.length > 0 ? (
-          <div class="animate flex gap-2 pt-1">
-            {post.data.tags.map((tag) => (
-              <a
-                href={`/tags/${tag}`}
-                class="rounded-sm border border-black/15 px-2 py-1 text-sm transition-colors duration-300 ease-in-out hover:bg-black/5 hover:text-black focus-visible:bg-black/5 focus-visible:text-black dark:border-white/20 dark:hover:bg-white/5 dark:hover:text-white dark:focus-visible:bg-white/5 dark:focus-visible:text-white"
-              >
-                {tag}
-              </a>
-            ))}
+          <h1 class="animate text-3xl font-semibold text-black dark:text-white">
+            {post.data.title}
+          </h1>
+          {
+            post.data.tags && post.data.tags?.length > 0 ? (
+              <div class="animate flex gap-2 pt-1">
+                {post.data.tags.map((tag) => (
+                  <a
+                    href={`/tags/${tag}`}
+                    class="rounded-sm border border-black/15 px-2 py-1 text-sm transition-colors duration-300 ease-in-out hover:bg-black/5 hover:text-black focus-visible:bg-black/5 focus-visible:text-black dark:border-white/20 dark:hover:bg-white/5 dark:hover:text-white dark:focus-visible:bg-white/5 dark:focus-visible:text-white"
+                  >
+                    {tag}
+                  </a>
+                ))}
+              </div>
+            ) : null
+          }
+        </div>
+      </HeroImage>
+    ) : (
+    <Container>
+        <div class="animate">
+          <BackToPrevious href="/blog" opaque={false}>Back to blog</BackToPrevious>
+        </div>
+        <div class="my-10 space-y-1">
+          <div class="animate flex items-center gap-1.5">
+            <div class="font-base text-sm">
+              <FormattedDate date={post.data.date} />
+            </div>
+            &bull;
+            {post.body && (
+              <div class="font-base text-sm">
+                {readingTime(post.body)}
+              </div>
+            )}        
           </div>
-        ) : null
-      }
-    </div>
+          <h1 class="animate text-3xl font-semibold text-black dark:text-white">
+            {post.data.title}
+          </h1>
+          {
+            post.data.tags && post.data.tags?.length > 0 ? (
+              <div class="animate flex gap-2 pt-1">
+                {post.data.tags.map((tag) => (
+                  <a
+                    href={`/tags/${tag}`}
+                    class="rounded-sm border border-black/15 px-2 py-1 text-sm transition-colors duration-300 ease-in-out hover:bg-black/5 hover:text-black focus-visible:bg-black/5 focus-visible:text-black dark:border-white/20 dark:hover:bg-white/5 dark:hover:text-white dark:focus-visible:bg-white/5 dark:focus-visible:text-white"
+                  >
+                    {tag}
+                  </a>
+                ))}
+              </div>
+            ) : null
+          }
+        </div>
+    </Container>
+    )
+    }
+  <Container>
     {headings.length > 0 && <TableOfContents headings={headings} />}
     <article class="animate">
       <Content />
@@ -93,7 +196,7 @@ const { Content, headings } = await render(post);
         <PostNavigation prevPost={prevPost} nextPost={nextPost} />
       </div>
       <div class="mt-24">
-        <Giscus />
+        <!-- <Giscus /> -->
       </div>
     </article>
   </Container>
