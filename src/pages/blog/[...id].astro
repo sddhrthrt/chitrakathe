@@ -116,9 +116,11 @@ const { Content, headings } = await render(post);
         positionY={image.positiony}
         alt={image.alt}
       >
+        <Container>
         <div class="animate">
           <BackToPrevious href="/blog" opaque={true}>All blogs</BackToPrevious>
         </div>
+        </Container>
         <div class="my-4 space-y-1 p-4 py-6 bg-white/40 dark:bg-black/40 rounded-md">
           <div class="animate flex items-center gap-1.5">
             <div class="text-sm font-semibold">
