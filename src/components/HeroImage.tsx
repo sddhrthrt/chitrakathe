@@ -14,7 +14,7 @@ export default function HeroImage({
   backgroundImage,
   mobileBackgroundImage,
   positionX = '30%',
-  positionY = '50%',
+  positionY = '20%',
   alt,
   children,
 }: HeroImageProps) {
