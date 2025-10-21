@@ -46,7 +46,7 @@ export default function HeroImage({
     function updateParallax() {
       const scrollPosition = window.pageYOffset
       const parallaxFactor = 0.5
-      parallaxElement.style.transform = `translate3d(0, ${scrollPosition * parallaxFactor}px, 0)`
+      parallaxElement!.style.transform = `translate3d(0, ${scrollPosition * parallaxFactor}px, 0)`
     }
 
     return () => {
