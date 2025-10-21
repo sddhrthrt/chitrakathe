@@ -20,7 +20,7 @@ export async function getStaticPaths() {
     props: post,
   }));
 }
-type Props = CollectionEntry<"blog">;
+// type Props = CollectionEntry<"blog">;
 
 const posts = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
