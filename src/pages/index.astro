@@ -8,7 +8,7 @@ import { getCollection } from "astro:content";
 import { Picture } from "astro:assets";
 import IndexContent from "@content/index-content.mdx";
 
-let allImages = import.meta.glob("../images/**/*.jpg") as Record<string, () => Promise<{ default: string }>>;
+let allImages = import.meta.glob("../images/**/*.jpg") as Record<string, () => Promise<{ default: { src: string } }>>;
 
 const blog = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
@@ -40,31 +40,14 @@ let heroImageSrc = heroImage ? await heroImage[1]() : null;
             <div class="animate">
               <IndexContent />
             </div>
-            <div class="animate">
-              {heroImageSrc ? (
-                <a href={`/${firstPost.collection}/${firstPost.id}`} class="block">
-                  <Picture
-                    src={heroImageSrc.default}
-                    alt={firstPost.data.image?.alt || ""}
-                    width={800}
-                    height={400}
-                  />
-                </a>
-              ) : null}
-            </div>
           </article>
         </section>
 
         <section class="animate space-y-6">
-          <div class="flex flex-wrap items-center justify-between gap-y-2">
-            <h2 class="font-semibold text-black dark:text-white">
-              Recent writing
-            </h2>
-            <Link href="/blog"> See all posts </Link>
-          </div>
+          <ArrowCard entry={blog[0]} backgroundImage={heroImageSrc ? {src: heroImageSrc.default.src} : null}/>
           <ul class="not-prose flex flex-col gap-4">
             {
-              blog.map((post) => (
+              blog.slice(1).map((post) => (
                 <li>
                   <ArrowCard entry={post} />
                 </li>
