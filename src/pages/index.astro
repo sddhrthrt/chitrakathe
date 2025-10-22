@@ -6,6 +6,7 @@ import ArrowCard from "@components/ArrowCard.astro";
 import Link from "@components/Link.astro";
 import { getCollection } from "astro:content";
 import { Picture } from "astro:assets";
+import IndexContent from "@content/index-content.mdx";
 
 let allImages = import.meta.glob("../images/**/*.jpg") as Record<string, () => Promise<{ default: string }>>;
 
@@ -36,6 +37,9 @@ let heroImageSrc = heroImage ? await heroImage[1]() : null;
       <div class="space-y-16">
         <section>
           <article class="space-y-4">
+            <div class="animate">
+              <IndexContent />
+            </div>
             <div class="animate">
               {heroImageSrc ? (
                 <a href={`/${firstPost.collection}/${firstPost.id}`} class="block">

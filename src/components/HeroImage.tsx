@@ -62,7 +62,7 @@ export default function HeroImage({
   return (
     <div
       ref={heroRef}
-      className="relative flex flex-col justify-center items-center text-center h-screen mb-8 md:-mx-16 -mx-8 overflow-hidden"
+      className="relative flex flex-col justify-center items-center text-center h-screen mb-8 sm:bx-2 overflow-hidden"
       data-pagefind-body
     >
       <div
@@ -94,7 +94,7 @@ export default function HeroImage({
         />
       </div>
       <div className="relative">
-        {children}
+      {children}
       </div>
       <img src={backgroundImage} alt={alt} className="sr-only" />
       <style>
