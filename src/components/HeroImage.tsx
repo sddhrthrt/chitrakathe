@@ -6,6 +6,8 @@ interface HeroImageProps {
   mobileBackgroundImage: string
   positionX?: string
   positionY?: string
+  mobilePositionX?: string
+  mobilePositionY?: string
   alt: string
   children?: React.ReactNode
 }
@@ -13,8 +15,10 @@ interface HeroImageProps {
 export default function HeroImage({
   backgroundImage,
   mobileBackgroundImage,
-  positionX = '30%',
-  positionY = '20%',
+  positionX = '50%',
+  positionY = '50%',
+  mobilePositionX = '30%',
+  mobilePositionY = '30%',
   alt,
   children,
 }: HeroImageProps) {
@@ -72,7 +76,7 @@ export default function HeroImage({
           className="absolute inset-0 bg-cover bg-no-repeat md:hidden"
           style={{
             backgroundImage: `url(${mobileBackgroundImage})`,
-            backgroundPosition: `${positionX} ${positionY}`,
+            backgroundPosition: `${mobilePositionX} ${mobilePositionY}`,
             top: '-20%',
             height: '120%',
           }}
