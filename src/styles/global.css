@@ -2,13 +2,13 @@
 
 @plugin '@tailwindcss/typography';
 
-@custom-variant dark (&:is(.dark *));
-
 @theme {
   --font-sans: Geist Sans, ui-sans-serif, system-ui, sans-serif,
     'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   --font-mono: Geist Mono, ui-monospace, SFMono-Regular, Menlo, Monaco,
     Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --color-sepia-200: #f8f2e9;
+  --color-sepia-400: #9e8152;
 }
 
 /*
@@ -48,14 +48,14 @@
   body {
     @apply font-sans antialiased;
     @apply flex flex-col;
-    @apply bg-neutral-100 dark:bg-neutral-900;
+    @apply bg-sepia-200 dark:bg-neutral-900;
     @apply text-black/75 dark:text-white/75;
   }
 
   header {
     @apply absolute left-0 right-0 top-0 z-50 pt-8 pb-3 md:px-2;
-    @apply bg-neutral-100/50 dark:bg-neutral-900/75;
-    @apply saturate-200 backdrop-blur-xs;
+    @apply bg-sepia-400/20 dark:bg-neutral-950/75;
+    @apply backdrop-blur-xs;
   }
 
   main {

@@ -73,7 +73,7 @@ export default function HeroImage({
         }}
       >
         <div
-          className="absolute inset-0 bg-cover bg-no-repeat md:hidden"
+          className="absolute inset-0 bg-cover bg-no-repeat md:hidden sepia-20 dark:sepia-0"
           style={{
             backgroundImage: `url(${mobileBackgroundImage})`,
             backgroundPosition: `${mobilePositionX} ${mobilePositionY}`,
@@ -83,7 +83,7 @@ export default function HeroImage({
           aria-hidden="true"
         />
         <div
-          className="absolute inset-0 bg-cover bg-no-repeat hidden md:block"
+          className="absolute inset-0 bg-cover bg-no-repeat hidden md:block sepia-20 dark:sepia-0"
           style={{
             backgroundImage: `url(${backgroundImage})`,
             backgroundPosition: `${positionX} ${positionY}`,
