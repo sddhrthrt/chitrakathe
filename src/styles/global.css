@@ -61,7 +61,7 @@
   }
 
   main {
-    @apply flex-1 pt-32;
+    @apply flex-1 pt-32 px-4;
   }
 
   footer {
