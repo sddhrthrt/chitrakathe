@@ -11,6 +11,8 @@
     Consolas, 'Liberation Mono', 'Courier New', monospace;
   --color-sepia-200: rgb(248, 242, 233);
   --color-sepia-400: rgb(105, 76, 30);
+  --site-header-height: 72px;
+  --gallery-height: calc(100vh - var(--site-header-height) - 3rem)
 }
 
 /*
@@ -55,13 +57,14 @@
   }
 
   header {
-    @apply absolute left-0 right-0 top-0 z-50 pt-8 pb-3 md:px-2;
+    @apply absolute left-0 right-0 top-0 z-50 pt-8 md:px-2 pb-3 h-(--site-header-height);
     @apply bg-sepia-200/10 dark:bg-neutral-950/75;
     @apply backdrop-blur-xs;
   }
 
   main {
-    @apply flex-1 pt-32 px-4;
+    @apply flex-1 px-4;
+    padding-top: calc(var(--site-header-height) + 1rem);
   }
 
   footer {
@@ -72,6 +75,21 @@
     @apply prose prose-neutral max-w-full dark:prose-invert prose-img:mx-auto prose-img:my-auto;
     @apply prose-headings:font-semibold;
     @apply prose-headings:text-black dark:prose-headings:text-white;
+  }
+
+  gallery {
+    @apply flex flex-row items-start gap-2 overflow-x-auto;
+    height: var(--gallery-height);
+    -webkit-overflow-scrolling: touch; /* iOS smooth scrolling */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */ 
+    ::-webkit-scrollbar { 
+      display: none;  /* Safari and Chrome */
+    }
+    img {
+      @apply min-w-fit;
+      height: var(--gallery-height); 
+    }
   }
 }
 

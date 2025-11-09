@@ -3,10 +3,9 @@ import Layout from "@layouts/Layout.astro";
 import Container from "@components/Container.astro";
 import { SITE, HOME } from "@consts";
 import ArrowCard from "@components/ArrowCard.astro";
-import Link from "@components/Link.astro";
 import { getCollection } from "astro:content";
-import { Picture } from "astro:assets";
 import IndexContent from "@content/index-content.mdx";
+import SpacerTitle from "@components/SpacerTitle.astro";
 
 let allImages = import.meta.glob("../images/**/*.jpg") as Record<string, () => Promise<{ default: { src: string } }>>;
 
@@ -23,12 +22,20 @@ let heroImage = (firstPost && firstPost.data.image) ? (
     )
   ) : null;
 let heroImageSrc = heroImage ? await heroImage[1]() : null;
-// const projects: CollectionEntry<"projects">[] = (
-//   await getCollection("projects")
-// )
-//   .filter((project) => !project.data.draft)
-//   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-//   .slice(0, SITE.NUM_PROJECTS_ON_HOMEPAGE);
+
+const gallery = (await getCollection("gallery"))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, SITE.NUM_POSTS_ON_HOMEPAGE);
+
+let firstGallery = gallery[0] || null;
+let galleryHeroImage = (firstGallery && firstGallery.data.images[0]) ? (
+  Object.entries(allImages)
+    .find((path) =>
+      path[0].includes(firstPost.data.image!.src)
+    )
+  ) : null;
+let galleryHeroImageSrc = galleryHeroImage ? await galleryHeroImage[1]() : null;
 ---
 
 <Layout title={HOME.TITLE} description={HOME.DESCRIPTION}>
@@ -43,6 +50,8 @@ let heroImageSrc = heroImage ? await heroImage[1]() : null;
           </article>
         </section>
 
+        <SpacerTitle title="Recent Posts" />
+
         <section class="animate space-y-6">
           <ArrowCard entry={blog[0]} backgroundImage={heroImageSrc ? {src: heroImageSrc.default.src} : null}/>
           <ul class="not-prose flex flex-col gap-4">
@@ -56,23 +65,22 @@ let heroImageSrc = heroImage ? await heroImage[1]() : null;
           </ul>
         </section>
 
-        <!-- <section class="animate space-y-6">
-          <div class="flex flex-wrap items-center justify-between gap-y-2">
-            <h2 class="font-semibold text-black dark:text-white">
-              Recent projects
-            </h2>
-            <Link href="/projects"> See all projects </Link>
-          </div>
+        <SpacerTitle title="Recent Galleries" />
+        
+        <section class="animate space-y-6">
+          <ArrowCard entry={gallery[0]} backgroundImage={galleryHeroImageSrc ? {src: galleryHeroImageSrc.default.src} : null}/>
           <ul class="not-prose flex flex-col gap-4">
             {
-              projects.map((project) => (
+              gallery.slice(1).map((post) => (
                 <li>
-                  <ArrowCard entry={project} />
+                  <ArrowCard entry={post} />
                 </li>
               ))
             }
           </ul>
-        </section> -->
+        </section>
+
+
 
       </div>
     </aside>

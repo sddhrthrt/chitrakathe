@@ -18,10 +18,10 @@ export const BLOG: Metadata = {
   DESCRIPTION: "Some thoughts I put into words.",
 };
 
-export const PROJECTS: Metadata = {
-  TITLE: "Projects",
+export const GALLERY: Metadata = {
+  TITLE: "Gallery",
   DESCRIPTION:
-    "Possibly empty list. Or too long to list?",
+    "A gallery of images.",
 };
 
 export const SOCIALS: Socials = [

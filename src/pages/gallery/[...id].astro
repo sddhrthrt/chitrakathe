@@ -1,0 +1,61 @@
+---
+import { type CollectionEntry, getCollection, render } from "astro:content";
+import Layout from "@layouts/Layout.astro";
+import Container from "@components/Container.astro";
+import { getImage } from "astro:assets";
+
+export async function getStaticPaths() {
+  const posts = (await getCollection("gallery"))
+    .filter((post) => !post.data.draft)
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  return posts.map((post) => ({
+    params: { id: post.id },
+    props: post,
+  }));
+}
+// type Props = CollectionEntry<"blog">;
+
+let allImages = import.meta.glob("../../images/**/*.jpg") as Record<string, () => Promise<{ default: string }>>;
+const post = Astro.props;
+
+let images = post.data.images.map(async (image): Promise<{src: string, alt: string} | undefined> => {
+  let i = Object.entries(allImages)
+    .find((path) =>
+      path[0].includes(image.src)
+    )
+  if (i) {
+    return {src: (await i[1]()).default, alt: image.alt};
+  }
+}).filter((img): img is Promise<{src: string, alt: string}> => img !== undefined);
+
+images = images.concat(images).concat(images);
+
+let imagesResolved = images.map(async (img) =>
+  await getImage({
+    src: (await img).src,
+    decoding: "sync",
+    format: "avif",
+    loading: "lazy",
+  })
+);
+
+// Resolve the image source/alt promises and the asset metadata up-front so
+// we can render a simple, synchronous mapping in the template.
+const resolvedAlts = await Promise.all(images);
+const resolvedImgs = await Promise.all(imagesResolved);
+
+await render(post);
+
+---
+
+<Layout title={post.data.title} description={post.data.description} showFooter={false}>
+  <!-- full-bleed gallery: remove the site's centered container so images can overflow horizontally -->
+  <gallery>
+      {resolvedImgs.map((img, index) => (
+        <img
+          src={img.src}
+          alt={resolvedAlts[index].alt}
+        />
+      ))}
+  </gallery>
+</Layout>

@@ -8,9 +8,10 @@ import { SITE } from "@consts";
 type Props = {
   title: string;
   description: string;
+  showFooter?: boolean;
 };
 
-const { title, description } = Astro.props;
+const { title, description, showFooter } = Astro.props;
 ---
 
 <!doctype html>
@@ -31,7 +32,7 @@ const { title, description } = Astro.props;
     <main>
       <slot />
     </main>
-    <Footer />
+    {showFooter ?? <Footer />}
     <Pagefind />
   </body>
 </html>
