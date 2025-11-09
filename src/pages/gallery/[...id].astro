@@ -50,13 +50,12 @@ await render(post);
 
 <Layout title={post.data.title} description={post.data.description} showFooter={false}>
   <!-- full-bleed gallery: remove the site's centered container so images can overflow horizontally -->
-  <div class="flex flex-row h-full items-start gap-2 overflow-x-scroll">
+  <gallery>
       {resolvedImgs.map((img, index) => (
         <img
           src={img.src}
           alt={resolvedAlts[index].alt}
-          class="h-full w-auto flex-shrink-0"
         />
       ))}
-  </div>
+  </gallery>
 </Layout>
