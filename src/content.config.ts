@@ -20,4 +20,24 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { blog };
+const gallery = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: "./src/content/gallery" }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    date: z.coerce.date(),
+    draft: z.boolean().optional(),
+    tags: z.array(z.string()).optional(),
+    images: z.array(
+      z.object({
+      src: z.string(), // relative to src/images/
+      alt: z.string(),
+      positionx: z.string().optional(),
+      positiony: z.string().optional(),
+      mobilepositionx: z.string().optional(),
+      mobilepositiony: z.string().optional(),
+    })),
+  }),
+});
+
+export const collections = { blog, gallery };
