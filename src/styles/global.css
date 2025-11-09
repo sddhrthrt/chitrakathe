@@ -78,7 +78,7 @@
   }
 
   gallery {
-    @apply flex flex-row items-start gap-2 overflow-x-auto;
+    @apply flex flex-row items-start gap-4 overflow-x-auto;
     height: var(--gallery-height);
     -webkit-overflow-scrolling: touch; /* iOS smooth scrolling */
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
