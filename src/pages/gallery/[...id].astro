@@ -28,8 +28,6 @@ let images = post.data.images.map(async (image): Promise<{src: string, alt: stri
   }
 }).filter((img): img is Promise<{src: string, alt: string}> => img !== undefined);
 
-images = images.concat(images).concat(images);
-
 let imagesResolved = images.map(async (img) =>
   await getImage({
     src: (await img).src,
