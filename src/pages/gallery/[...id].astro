@@ -1,7 +1,6 @@
 ---
-import { type CollectionEntry, getCollection, render } from "astro:content";
+import { getCollection, render } from "astro:content";
 import Layout from "@layouts/Layout.astro";
-import Container from "@components/Container.astro";
 import { getImage } from "astro:assets";
 
 export async function getStaticPaths() {
@@ -56,4 +55,21 @@ await render(post);
         />
       ))}
   </gallery>
+<script is:inline>
+  const initScrolling = () => {
+    const scrollContainer = document.querySelector('gallery');
+    window.addEventListener('wheel', (e) => {
+      console.log('scroll event', e);
+      e.preventDefault();
+      scrollContainer.scrollLeft += e.deltaY;
+    }, { passive: false });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScrolling, { once: true })
+  } else {
+    initScrolling()
+  }
+
+
+</script>
 </Layout>
