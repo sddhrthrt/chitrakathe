@@ -59,9 +59,8 @@ await render(post);
   const initScrolling = () => {
     const scrollContainer = document.querySelector('gallery');
     window.addEventListener('wheel', (e) => {
-      console.log('scroll event', e);
       e.preventDefault();
-      scrollContainer.scrollLeft += e.deltaY;
+      scrollContainer.scrollLeft += (e.deltaY + e.deltaX);
     }, { passive: false });
   }
   if (document.readyState === 'loading') {
