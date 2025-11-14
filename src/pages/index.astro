@@ -32,7 +32,7 @@ let firstGallery = gallery[0] || null;
 let galleryHeroImage = (firstGallery && firstGallery.data.images[0]) ? (
   Object.entries(allImages)
     .find((path) =>
-      path[0].includes(firstPost.data.image!.src)
+      path[0].includes(firstGallery.data.images[0].src)
     )
   ) : null;
 let galleryHeroImageSrc = galleryHeroImage ? await galleryHeroImage[1]() : null;
