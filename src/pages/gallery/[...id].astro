@@ -57,14 +57,20 @@ await render(post);
   <gallery class="px-4">
   <div class="min-w-64">
     { 
-      posts.map((p) => (
+      posts.map((p, i) => (
         <div class="py-1">
-          <a 
-            href={`/gallery/${p.id}`} 
-            class={`text-sm no-underline hover:underline ${p.id === post.id ? 'font-bold' : ''}`}
-          >
-            {p.data.title}
-          </a>
+          <div class:list={[
+            ['p-2'],
+            (p.id == post.id) && ['dark:bg-white/5', 'bg-sepia-400/5']
+          ]}>
+            <a 
+              href={`/gallery/${p.id}`} 
+              class="text-sm no-underline hover:underline"
+            >
+              <div class:list={[(p.id == post.id) && ['font-bold']]}> {p.data.title} </div>
+              { p.id === post.id && <div class="pt-2"> {p.data.description} </div> }
+            </a>
+          </div>
         </div>
       ))
     }
