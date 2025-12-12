@@ -46,9 +46,6 @@ const resolvedImgs = await Promise.all(imagesResolved);
 var posts = (await getCollection("gallery"))
   .filter((post) => !post.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-posts = posts.concat(posts).concat(posts)
-posts = posts.concat(posts).concat(posts)
-posts = posts.concat(posts).concat(posts)
 
 
 await render(post);
