@@ -94,7 +94,9 @@ await render(post);
   } else {
     initScrolling();
   }
-  window.addEventListener('pageshow', (e) => { console.log("ooh", e); if (e.persisted) initScrolling(); });
+  document.addEventListener("astro:page-load", () => {
+      initScrolling();
+  });
 
 
 </script>
