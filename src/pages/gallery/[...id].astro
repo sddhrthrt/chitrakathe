@@ -41,13 +41,37 @@ let imagesResolved = images.map(async (img) =>
 const resolvedAlts = await Promise.all(images);
 const resolvedImgs = await Promise.all(imagesResolved);
 
+// Build left menu
+
+var posts = (await getCollection("gallery"))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+posts = posts.concat(posts).concat(posts)
+posts = posts.concat(posts).concat(posts)
+posts = posts.concat(posts).concat(posts)
+
+
 await render(post);
 
 ---
 
 <Layout title={post.data.title} description={post.data.description} showFooter={false}>
   <!-- full-bleed gallery: remove the site's centered container so images can overflow horizontally -->
-  <gallery>
+  <gallery class="px-4">
+  <div class="min-w-64">
+    { 
+      posts.map((p) => (
+        <div class="py-1">
+          <a 
+            href={`/gallery/${p.id}`} 
+            class={`text-sm no-underline hover:underline ${p.id === post.id ? 'font-bold' : ''}`}
+          >
+            {p.data.title}
+          </a>
+        </div>
+      ))
+    }
+  </div>
       {resolvedImgs.map((img, index) => (
         <img
           src={img.src}
@@ -58,16 +82,22 @@ await render(post);
 <script is:inline>
   const initScrolling = () => {
     const scrollContainer = document.querySelector('gallery');
-    window.addEventListener('wheel', (e) => {
+    if (!scrollContainer) return;
+    const onWheel = (e) => {
       e.preventDefault();
-      scrollContainer.scrollLeft += (e.deltaY + e.deltaX);
-    }, { passive: false });
-  }
+      scrollContainer.scrollLeft += e.deltaY + e.deltaX;
+    };
+    window.addEventListener('wheel', onWheel, { passive: false });
+  };
+
+  // If DOM is ready, init immediately; otherwise wait for DOMContentLoaded.
+  // Also handle bfcache restores.
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initScrolling, { once: true })
+    document.addEventListener('DOMContentLoaded', initScrolling, { once: true });
   } else {
-    initScrolling()
+    initScrolling();
   }
+  window.addEventListener('pageshow', (e) => { console.log("ooh", e); if (e.persisted) initScrolling(); });
 
 
 </script>

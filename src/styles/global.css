@@ -63,7 +63,7 @@
   }
 
   main {
-    @apply flex-1 px-4;
+    @apply flex-1;
     padding-top: calc(var(--site-header-height) + 1rem);
   }
 
