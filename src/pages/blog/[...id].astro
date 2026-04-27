@@ -52,7 +52,7 @@ const prevPost = getPrevPost();
 const post = Astro.props;
 let image = post.data.image;
 
-let allImages = import.meta.glob("../../images/**/*.jpg") as Record<string, () => Promise<{ default: string }>>;
+let allImages = import.meta.glob("../../images/**/*.jp*(e)g") as Record<string, () => Promise<{ default: string }>>;
 let heroImage = image ? (
   Object.entries(allImages)
     .find((path) =>
