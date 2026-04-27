@@ -52,7 +52,7 @@ const prevPost = getPrevPost();
 const post = Astro.props;
 let image = post.data.image;
 
-let allImages = import.meta.glob("../../images/**/*.jp*(e)g") as Record<string, () => Promise<{ default: string }>>;
+let allImages = import.meta.glob("../../content/blog/**/images/**/*.jp*(e)g") as Record<string, () => Promise<{ default: string }>>;
 let heroImage = image ? (
   Object.entries(allImages)
     .find((path) =>
@@ -101,13 +101,17 @@ const metaImage = src
     })
   : null;
 
+if (image && !backgroundImage) {
+  console.warn(`Image specified in frontmatter (${image.src}) not found in globbed images: ${Object.keys(allImages).join(", ")}`);
+}
+
 const { Content, headings } = await render(post);
 
 ---
 
 <Layout title={post.data.title} description={post.data.description}>
     {
-    image ? (
+    (image && backgroundImage) ? (
       <HeroImage
         client:load
         backgroundImage={backgroundImage!.src}
